@@ -3,6 +3,7 @@
 .code
 cmake-build-*
 [B]build
+vgcore*
 
 # Prerequisites
 *.d
