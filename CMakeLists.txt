@@ -6,6 +6,7 @@ set(SOURCE_FILES
         src/graph.c
         src/topology.c
         app.c
+        src/net.c
 )
 
 # Find GLib 2

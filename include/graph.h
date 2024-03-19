@@ -3,20 +3,19 @@
 #define TCPIP_GRAPH_H
 
 #include "glib.h"
+#include "net.h"
+#include "common_type_def.h"
 
 #define NODE_NAME_SIZE 32
 #define TOPOLOGY_NAME_SIZE 32
 #define INTERFACE_NAME_SIZE 32
 #define  MAX_INTERFACE_PER_NODE 10
 
-typedef struct Graph Graph;
-typedef struct Interface Interface;
-typedef struct Node Node;
-typedef struct Link Link;
 
 struct Node {
     char node_name[NODE_NAME_SIZE];
     Interface *interfaces[MAX_INTERFACE_PER_NODE];
+    NodeNetworkProperty nodeNetworkProperty;
 };
 
 struct Graph {
@@ -29,6 +28,7 @@ struct Interface {
     char interface_name[INTERFACE_NAME_SIZE];
     struct Node *device_node;
     struct Link *link;
+    InterfaceNetworkProperty interfaceNetworkProperty;
 };
 
 struct Link {
@@ -56,8 +56,8 @@ static int get_empty_interface_node_slot(const Node *node) {
     return -1;
 }
 
-static Interface *get_neighbor_node(const Interface *interface) {
-    const Link *link = interface->link;
+static inline Interface *get_neighbor_node(const Interface *interface) {
+    Link *link = interface->link;
 
     if (&link->interface_A == interface) {
         return &link->interface_B;
@@ -65,5 +65,35 @@ static Interface *get_neighbor_node(const Interface *interface) {
         return &link->interface_A;
     }
 }
+
+static inline Interface *find_interface_by_name(const Node *node, const char *interface_name) {
+
+    if (!node)
+        return NULL;
+
+
+    for (int i = 0; i < MAX_INTERFACE_PER_NODE; ++i) {
+        const Interface *current_interface = node->interfaces[i];
+        if (current_interface && strcmp(current_interface->interface_name, interface_name) == 0) {
+            return (Interface *) current_interface;
+        }
+    }
+
+    return NULL;
+}
+
+
+static inline char *get_node_loopback_address(Node *node) {
+    return node->nodeNetworkProperty.ip_address_loopback.address;
+}
+
+static inline char *get_interface_mac_address(Interface *interface) {
+    return interface->interfaceNetworkProperty.mac_address.address;
+}
+
+static inline char *get_interface_ip_address(Interface *interface) {
+    return interface->interfaceNetworkProperty.ip_address.address;
+}
+
 
 #endif //TCPIP_GRAPH_H

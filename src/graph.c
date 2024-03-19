@@ -3,6 +3,7 @@
 #include "string.h"
 #include <stdio.h>
 
+
 Graph *create_new_graph(const char *topology_name) {
     Graph *graph = calloc(1, sizeof(Graph));
     if (graph == NULL) {
@@ -19,11 +20,14 @@ Node *create_graph_node(Graph *graph, const char *node_name) {
         fprintf(stderr, "Invalid graph pointer\n");
         return NULL;
     }
+
     Node *node = calloc(1, sizeof(Node));
     if (node == NULL) {
         fprintf(stderr, "Memory allocation failed for Node\n");
         return NULL;
     }
+
+    create_node_network_property(&node->nodeNetworkProperty);
 
     for (int i = 0; i < MAX_INTERFACE_PER_NODE; ++i) {
         node->interfaces[i] = NULL;
@@ -59,16 +63,24 @@ void insert_link_between_two_nodes(
 
     link->cost = cost;
 
+
     int index_interfaces_node_A = get_empty_interface_node_slot(node_A);
     int index_interfaces_node_B = get_empty_interface_node_slot(node_B);
 
 
     node_A->interfaces[index_interfaces_node_A] = &link->interface_A;
     node_B->interfaces[index_interfaces_node_B] = &link->interface_B;
-};
+
+    create_interface_network_property(&node_A->interfaces[index_interfaces_node_A]->interfaceNetworkProperty);
+    create_interface_network_property(&node_B->interfaces[index_interfaces_node_B]->interfaceNetworkProperty);
+
+    interface_assign_mac_address(&link->interface_A);
+    interface_assign_mac_address(&link->interface_B);
+
+}
 
 
-void dump_interface(const Interface *interface) {
+void dump_interface(Interface *interface) {
     if (interface == NULL) {
 //        printf("Error: Interface is NULL\n");
         return;
@@ -77,11 +89,20 @@ void dump_interface(const Interface *interface) {
     printf("  Local Node: %s, Interface Name: %s, Neighbor Node: %s, Cost: %u\n",
            interface->device_node->node_name,
            interface->interface_name,
-           interface->link ? get_neighbor_node(interface)->device_node : "(not connected)",
+           interface->link ? get_neighbor_node(interface)->device_node->node_name : "(not connected)",
            interface->link ? interface->link->cost : 0);
+
+    char *ipv4 = get_interface_ip_address(interface);
+    char *mac = get_interface_mac_address(interface);
+    unsigned char mask = interface->interfaceNetworkProperty.mask;
+    printf("\t IPV4 : %s/%u", ipv4 ? ipv4 : "(None)", mask);
+    printf("\t MAC : %02x:%02x:%02x:%02x:%02x:%02x\n",
+           mac[0], mac[1],
+           mac[2], mac[3],
+           mac[4], mac[5]);
 }
 
-void dump_node(const Node *node) {
+void dump_node(Node *node) {
     if (node == NULL) {
         printf("Error: Node is NULL\n");
         return;
@@ -89,6 +110,9 @@ void dump_node(const Node *node) {
 
     printf("Node Name: %s\n", node->node_name);
 
+    bool is_ip_config = node->nodeNetworkProperty.is_loopback_address_config;
+
+    printf("LoopBack Address: %s\n", is_ip_config ? get_node_loopback_address(node) : "(None)");
     for (int i = 0; i < MAX_INTERFACE_PER_NODE; i++) {
         dump_interface(node->interfaces[i]);
     }
@@ -102,8 +126,7 @@ void dump_graph(const Graph *graph) {
         return;
     }
 
-    printf("Topology Name: %s\n",
-           graph->topology_name ? graph->topology_name : "(not set)");
+    printf("Topology Name: %s\n", graph->topology_name);
 
     for (GList *node_list = graph->node_list; node_list != NULL; node_list = g_list_next(node_list)) {
         Node *node = node_list->data;
