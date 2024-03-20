@@ -46,6 +46,10 @@ void insert_link_between_two_nodes(Node *node_A, Node *node_B, char *interface_n
 
 void dump_graph(const Graph *graph);
 
+void dump_node(Node *node);
+
+void dump_interface(Interface *interface);
+
 // Static Methode
 static int get_empty_interface_node_slot(const Node *node) {
     for (int i = 0; i < MAX_INTERFACE_PER_NODE; i++) {
@@ -82,7 +86,6 @@ static inline Interface *find_interface_by_name(const Node *node, const char *in
     return NULL;
 }
 
-
 static inline char *get_node_loopback_address(Node *node) {
     return node->nodeNetworkProperty.ip_address_loopback.address;
 }
@@ -95,5 +98,6 @@ static inline char *get_interface_ip_address(Interface *interface) {
     return interface->interfaceNetworkProperty.ip_address.address;
 }
 
+Node *find_node_by_name(Graph *graph, char *node_name);
 
 #endif //TCPIP_GRAPH_H

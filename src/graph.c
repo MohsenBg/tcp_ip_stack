@@ -133,3 +133,18 @@ void dump_graph(const Graph *graph) {
         dump_node(node);
     }
 }
+
+Node *find_node_by_name(Graph *graph, char *node_name) {
+    if (graph == NULL) {
+        printf("Error: Graph is NULL\n");
+        return NULL;
+    }
+
+    for (GList *iter = graph->node_list; iter != NULL; iter = g_list_next(iter)) {
+        Node *current_node = (Node *) iter->data;
+        if (strcmp(current_node->node_name, node_name) == 0)
+            return current_node;
+    }
+
+    return NULL;
+}

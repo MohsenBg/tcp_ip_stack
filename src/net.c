@@ -84,7 +84,7 @@ bool node_unset_interface_ip_address(Node *node, const char *local_interface) {
     config_interface->interfaceNetworkProperty.is_ip_address_config = false;
 
     return true;
-};
+}
 
 void interface_assign_mac_address(Interface *interface) {
     Node *node = interface->device_node;
@@ -96,6 +96,6 @@ void interface_assign_mac_address(Interface *interface) {
     hash_value *= generate_hash_code(interface->interface_name, INTERFACE_NAME_SIZE);
 
     memset(get_interface_mac_address(interface), 0, MAC_ADDRESS_SIZE);
-   
+
     memcpy(get_interface_mac_address(interface), (char *) &hash_value, sizeof(unsigned int));
 }

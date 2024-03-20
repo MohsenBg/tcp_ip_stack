@@ -49,12 +49,13 @@ Graph *build_simple_topology() {
     node_set_interface_ip_address(R0_router, "eth0/4", "40.1.1.1", 24);
 
     // R1_router config
-    node_unset_loopback_address(R1_router);
+
+    node_set_loopback_address(R1_router, "122.1.1.1");
     node_set_interface_ip_address(R1_router, "eth0/1", "20.1.1.2", 24);
     node_set_interface_ip_address(R1_router, "eth0/2", "30.1.1.1", 24);
 
     // R2_router config
-    node_unset_loopback_address(R2_router);
+    node_set_loopback_address(R2_router, "122.1.1.2");
     node_set_interface_ip_address(R2_router, "eth0/5", "40.1.1.2", 24);
     node_set_interface_ip_address(R2_router, "eth0/3", "30.1.1.2", 24);
 
