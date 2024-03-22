@@ -16,6 +16,8 @@ struct Node {
     char node_name[NODE_NAME_SIZE];
     Interface *interfaces[MAX_INTERFACE_PER_NODE];
     NodeNetworkProperty nodeNetworkProperty;
+    unsigned int udp_port_number;
+    int udp_socket_fd;
 };
 
 struct Graph {
@@ -60,13 +62,13 @@ static int get_empty_interface_node_slot(const Node *node) {
     return -1;
 }
 
-static inline Interface *get_neighbor_node(const Interface *interface) {
+static inline Node *get_neighbor_node(const Interface *interface) {
     Link *link = interface->link;
 
     if (&link->interface_A == interface) {
-        return &link->interface_B;
+        return link->interface_B.device_node;
     } else {
-        return &link->interface_A;
+        return link->interface_A.device_node;
     }
 }
 

@@ -4,6 +4,8 @@
 
 #include "graph.h"
 
+extern void network_start_packet_receiver_thread(Graph *);
+
 Graph *build_simple_topology() {
 
 /*
@@ -59,5 +61,6 @@ Graph *build_simple_topology() {
     node_set_interface_ip_address(R2_router, "eth0/5", "40.1.1.2", 24);
     node_set_interface_ip_address(R2_router, "eth0/3", "30.1.1.2", 24);
 
+    network_start_packet_receiver_thread(topology);
     return topology;
 }

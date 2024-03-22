@@ -38,4 +38,5 @@ terminate_signal_handler();
 
 void
 collect_supportsave_data();
+
 #endif /* __CLICBEXTN__ */

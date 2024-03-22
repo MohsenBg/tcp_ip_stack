@@ -2,7 +2,7 @@
 #include "graph.h"
 #include "string.h"
 #include <stdio.h>
-
+#include "communication.h"
 
 Graph *create_new_graph(const char *topology_name) {
     Graph *graph = calloc(1, sizeof(Graph));
@@ -35,6 +35,7 @@ Node *create_graph_node(Graph *graph, const char *node_name) {
 
     strncpy(node->node_name, node_name, NODE_NAME_SIZE - 1);
     node->node_name[NODE_NAME_SIZE - 1] = '\0';
+    init_udp_socket(node);
     graph->node_list = g_list_append(graph->node_list, node);
     return node;
 }
@@ -89,7 +90,7 @@ void dump_interface(Interface *interface) {
     printf("  Local Node: %s, Interface Name: %s, Neighbor Node: %s, Cost: %u\n",
            interface->device_node->node_name,
            interface->interface_name,
-           interface->link ? get_neighbor_node(interface)->device_node->node_name : "(not connected)",
+           interface->link ? get_neighbor_node(interface)->node_name : "(not connected)",
            interface->link ? interface->link->cost : 0);
 
     char *ipv4 = get_interface_ip_address(interface);
