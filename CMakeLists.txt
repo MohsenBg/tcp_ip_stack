@@ -18,6 +18,7 @@ set(SOURCE_FILES
         src/cli.c
         src/memory_manager.c
         src/thread_management.c
+        src/layer2/layer2.c
 )
 
 # Add subdirectory for command parser library

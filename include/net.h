@@ -61,4 +61,6 @@ node_set_interface_ip_address(Node *node, const char *local_interface, const cha
 
 bool node_unset_interface_ip_address(Node *node, const char *local_interface);
 
+char *packer_buffer_shift_right(char *packet, size_t packet_size, size_t total_buffer);
+
 #endif //TCPIP_NET_H

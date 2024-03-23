@@ -6,8 +6,12 @@
 #include "memory_manager.h"
 
 Graph *create_new_graph(const char *topology_name) {
+
+    // Allocate memory for a Graph structure.
+    // Note: Do not add Graph structures to the memory manager, as they contain GList,
+    // which needs to be freed separately using g_list_free.
     Graph *graph = calloc(1, sizeof(Graph));
-//    add_allocation((void *) graph);
+
 
     if (graph == NULL) {
         fprintf(stderr, "Memory allocation failed for Graph\n");
@@ -24,8 +28,7 @@ Node *create_graph_node(Graph *graph, const char *node_name) {
         return NULL;
     }
 
-    Node *node = calloc(1, sizeof(Node));
-    add_allocation((void *) node);
+    Node *node = (Node *) allocate_memory_with_calloc(1, sizeof(Node));
 
     if (node == NULL) {
         fprintf(stderr, "Memory allocation failed for Node\n");
@@ -45,7 +48,6 @@ Node *create_graph_node(Graph *graph, const char *node_name) {
     return node;
 }
 
-
 void insert_link_between_two_nodes(
         Node *node_A,
         Node *node_B,
@@ -53,8 +55,7 @@ void insert_link_between_two_nodes(
         char *interface_name_B,
         unsigned int cost) {
 
-    Link *link = calloc(1, sizeof(Link));
-    add_allocation((void *) link);
+    Link *link = (Link *) allocate_memory_with_calloc(1, sizeof(Link));
 
     strncpy(link->interface_A.interface_name, interface_name_A, INTERFACE_NAME_SIZE);
     link->interface_A.interface_name[INTERFACE_NAME_SIZE - 1] = '\0';

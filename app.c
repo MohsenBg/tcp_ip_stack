@@ -3,6 +3,8 @@
 #include <unistd.h>
 #include "communication.h"
 #include "thread_management.h"
+#include "layer2/layer2.h"
+#include "memory_manager.h"
 
 extern Graph *build_simple_topology();
 
@@ -11,6 +13,8 @@ extern void destroy_topology(Graph *);
 Graph *topology;
 
 int main() {
+    initialize_memory_manager();
+
     topology = build_simple_topology();
     sleep(2);
     dump_graph(topology);
@@ -27,5 +31,7 @@ int main() {
     cancel_all_threads();
     wait_for_all_threads();
     destroy_topology(topology);
+
+    printf("%lu", sizeof(EthernetHeader));
     return 0;
 }

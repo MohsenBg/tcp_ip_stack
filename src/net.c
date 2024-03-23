@@ -99,3 +99,10 @@ void interface_assign_mac_address(Interface *interface) {
 
     memcpy(get_interface_mac_address(interface), (char *) &hash_value, sizeof(unsigned int));
 }
+
+char *packer_buffer_shift_right(char *packet, size_t packet_size, size_t total_buffer) {
+    size_t offset = total_buffer - packet_size;
+    memcpy(packet, packet + offset, packet_size);
+    memset(packet, 0, packet_size);
+    return packet + offset;
+}

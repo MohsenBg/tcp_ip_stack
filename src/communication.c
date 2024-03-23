@@ -124,11 +124,14 @@ deliver_packet_receive_to_interface(Node *receive_node, char packet[MAX_PACKET_B
     packet_receive(receive_node, receive_interface, packet_data, packet_data_size);
 }
 
+extern void layer2_interface_frame_receive(Interface *, char *, size_t);
+
 int packet_receive(Node *node, Interface *interface, char *packet, size_t length) {
-    printf("packet data: %s \n"
-           "Node : %s \n"
-           "interface_name : %s \n",
-           packet, node->node_name, interface->interface_name);
+    size_t total_packet_size = MAX_PACKET_BUFFER_SIZE - INTERFACE_NAME_SIZE;
+    packet = packer_buffer_shift_right(packet,
+                                       length, total_packet_size);
+
+    layer2_interface_frame_receive(interface, packet, length);
     return 0;
 }
 
