@@ -16,6 +16,8 @@ set(SOURCE_FILES
         src/cli/debug_command.c
         src/cli/clear_command.c
         src/cli.c
+        src/memory_manager.c
+        src/thread_management.c
 )
 
 # Add subdirectory for command parser library

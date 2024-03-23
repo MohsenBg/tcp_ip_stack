@@ -3,9 +3,12 @@
 #include "string.h"
 #include <stdio.h>
 #include "communication.h"
+#include "memory_manager.h"
 
 Graph *create_new_graph(const char *topology_name) {
     Graph *graph = calloc(1, sizeof(Graph));
+//    add_allocation((void *) graph);
+
     if (graph == NULL) {
         fprintf(stderr, "Memory allocation failed for Graph\n");
         return NULL;
@@ -22,6 +25,8 @@ Node *create_graph_node(Graph *graph, const char *node_name) {
     }
 
     Node *node = calloc(1, sizeof(Node));
+    add_allocation((void *) node);
+
     if (node == NULL) {
         fprintf(stderr, "Memory allocation failed for Node\n");
         return NULL;
@@ -49,6 +54,7 @@ void insert_link_between_two_nodes(
         unsigned int cost) {
 
     Link *link = calloc(1, sizeof(Link));
+    add_allocation((void *) link);
 
     strncpy(link->interface_A.interface_name, interface_name_A, INTERFACE_NAME_SIZE);
     link->interface_A.interface_name[INTERFACE_NAME_SIZE - 1] = '\0';
@@ -149,3 +155,7 @@ Node *find_node_by_name(Graph *graph, char *node_name) {
 
     return NULL;
 }
+
+
+
+

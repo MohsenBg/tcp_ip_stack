@@ -1,4 +1,5 @@
 #include "communication.h"
+#include "thread_management.h"
 #include <sys/socket.h>
 #include <netdb.h>
 #include <stdio.h>
@@ -54,10 +55,11 @@ void init_udp_socket(Node *node) {
 // Receive
 void network_start_packet_receiver_thread(Graph *topology) {
     pthread_t thread;
-    pthread_attr_t attr;
-    pthread_attr_init(&attr);
-    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
-    pthread_create(&thread, &attr, thread_start_packet_receiver_thread, (void *) topology);
+//    pthread_attr_t attr;
+//    pthread_attr_init(&attr);
+//    pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
+    pthread_create(&thread, NULL, thread_start_packet_receiver_thread, (void *) topology);
+    add_thread(thread);
 }
 
 _Noreturn static void *thread_start_packet_receiver_thread(void *_topology) {
@@ -81,7 +83,6 @@ _Noreturn static void *thread_start_packet_receiver_thread(void *_topology) {
             socket_max_fd = (node->udp_socket_fd > socket_max_fd) ? node->udp_socket_fd : socket_max_fd;
         }
     }
-
     // Main event loop
     while (1) {
         // Reset active_socket_fd_set with backup_socket_fd_set
@@ -100,8 +101,9 @@ _Noreturn static void *thread_start_packet_receiver_thread(void *_topology) {
                 deliver_packet_receive_to_interface(node, receive_buffer, bytes_received);
             }
         }
+        pthread_testcancel();
     }
-//    pthread_exit(NULL);
+    pthread_exit(NULL);
 }
 
 static void
