@@ -3,7 +3,6 @@
 //
 
 #include "graph.h"
-#include "memory_manager.h"
 
 extern void network_start_packet_receiver_thread(Graph *);
 
@@ -111,10 +110,4 @@ Graph *build_liner_topology() {
     node_set_interface_ip_address(R3, "eth0/4", "11.1.1.1", 24);
 }
 
-
-void destroy_topology(Graph *topology) {
-    deallocate_all_memory();
-    g_list_free(topology->node_list); // Free the GList itself
-
-}
 

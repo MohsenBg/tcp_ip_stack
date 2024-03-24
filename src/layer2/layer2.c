@@ -2,8 +2,8 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h> // for strncmp
-#include <graph.h>  // assuming get_interface_mac_address() is declared here
+#include <string.h>
+#include <graph.h>
 
 static bool layer2_interface_frame_acceptance_check(
         Interface *interface,

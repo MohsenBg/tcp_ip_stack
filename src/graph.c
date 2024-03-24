@@ -6,12 +6,7 @@
 #include "memory_manager.h"
 
 Graph *create_new_graph(const char *topology_name) {
-
-    // Allocate memory for a Graph structure.
-    // Note: Do not add Graph structures to the memory manager, as they contain GList,
-    // which needs to be freed separately using g_list_free.
-    Graph *graph = calloc(1, sizeof(Graph));
-
+    Graph *graph = (Graph *) allocate_memory_with_calloc(1, sizeof(Graph));
 
     if (graph == NULL) {
         fprintf(stderr, "Memory allocation failed for Graph\n");
@@ -45,6 +40,11 @@ Node *create_graph_node(Graph *graph, const char *node_name) {
     node->node_name[NODE_NAME_SIZE - 1] = '\0';
     init_udp_socket(node);
     graph->node_list = g_list_append(graph->node_list, node);
+    
+    // Add the head of the graph's node list to the memory manager.
+    // This function handles duplicates automatically.
+    add_glist_to_memory_manager(graph->node_list);
+
     return node;
 }
 

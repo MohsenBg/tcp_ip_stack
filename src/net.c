@@ -23,8 +23,8 @@ bool node_set_loopback_address(Node *node, const char *ip_address) {
 
     node->nodeNetworkProperty.is_loopback_address_config = true;
 
-    strncpy(get_node_loopback_address(node), ip_address, IPV4_ADDRESS_SIZE - 1);
-    get_node_loopback_address(node)[IPV4_ADDRESS_SIZE - 1] = '\0';
+    strncpy(get_node_loopback_address(node), ip_address, IPV4_ADDRESS_STRING_SIZE - 1);
+    get_node_loopback_address(node)[IPV4_ADDRESS_STRING_SIZE - 1] = '\0';
     return true;
 }
 
@@ -34,8 +34,8 @@ bool node_unset_loopback_address(Node *node) {
         return false;
     }
 
-    memset(get_node_loopback_address(node), 0, IPV4_ADDRESS_SIZE);
-    get_node_loopback_address(node)[IPV4_ADDRESS_SIZE - 1] = '\0';
+    memset(get_node_loopback_address(node), 0, IPV4_ADDRESS_STRING_SIZE);
+    get_node_loopback_address(node)[IPV4_ADDRESS_STRING_SIZE - 1] = '\0';
 
     node->nodeNetworkProperty.is_loopback_address_config = false;
 
@@ -57,8 +57,8 @@ node_set_interface_ip_address(Node *node, const char *local_interface, const cha
 
     config_interface->interfaceNetworkProperty.is_ip_address_config = true;
 
-    strncpy(get_interface_ip_address(config_interface), ip_address, IPV4_ADDRESS_SIZE - 1);
-    get_interface_ip_address(config_interface)[IPV4_ADDRESS_SIZE - 1] = '\0';
+    strncpy(get_interface_ip_address(config_interface), ip_address, IPV4_ADDRESS_STRING_SIZE - 1);
+    get_interface_ip_address(config_interface)[IPV4_ADDRESS_STRING_SIZE - 1] = '\0';
     config_interface->interfaceNetworkProperty.mask = mask;
 
     return true;
@@ -77,8 +77,8 @@ bool node_unset_interface_ip_address(Node *node, const char *local_interface) {
     }
 
 
-    memset(get_interface_ip_address(config_interface), 0, IPV4_ADDRESS_SIZE);
-    get_interface_ip_address(config_interface)[IPV4_ADDRESS_SIZE - 1] = '\0';
+    memset(get_interface_ip_address(config_interface), 0, IPV4_ADDRESS_STRING_SIZE);
+    get_interface_ip_address(config_interface)[IPV4_ADDRESS_STRING_SIZE - 1] = '\0';
     config_interface->interfaceNetworkProperty.mask = 0;
 
     config_interface->interfaceNetworkProperty.is_ip_address_config = false;
@@ -106,3 +106,19 @@ char *packer_buffer_shift_right(char *packet, size_t packet_size, size_t total_b
     memset(packet, 0, packet_size);
     return packet + offset;
 }
+
+char *convert_uint32_to_ipv4(uint32_t ip_address, char *ipv4_str) {
+    if (ipv4_str == NULL) {
+        fprintf(stderr, "Memory allocation failed");
+        return NULL;
+    }
+
+    snprintf(ipv4_str, 16, "%d.%d.%d.%d",
+             (ip_address >> 24) & 0xFF,
+             (ip_address >> 16) & 0xFF,
+             (ip_address >> 8) & 0xFF,
+             ip_address & 0xFF);
+
+    return ipv4_str;
+}
+

@@ -1,7 +1,3 @@
-//
-// Created by Bagheri on 3/18/24.
-//
-
 #ifndef TCPIP_COMMON_TYPE_DEF_H
 #define TCPIP_COMMON_TYPE_DEF_H
 

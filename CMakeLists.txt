@@ -19,6 +19,7 @@ set(SOURCE_FILES
         src/memory_manager.c
         src/thread_management.c
         src/layer2/layer2.c
+        src/layer2/protocols/arp.c
 )
 
 # Add subdirectory for command parser library

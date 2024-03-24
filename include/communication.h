@@ -1,6 +1,3 @@
-//
-// Created by Bagheri on 3/22/24.
-//
 
 #ifndef TCPIP_COMMUNICATION_H
 #define TCPIP_COMMUNICATION_H

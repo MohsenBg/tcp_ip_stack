@@ -1,7 +1,3 @@
-//
-// Created by Bagheri on 3/20/24.
-//
-
 #ifndef TCPIP_CLI_H
 #define TCPIP_CLI_H
 

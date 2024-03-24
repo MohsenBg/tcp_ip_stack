@@ -1,7 +1,3 @@
-//
-// Created by Bagheri on 3/23/24.
-//
-
 #ifndef TCPIP_THREAD_MANAGEMENT_H
 #define TCPIP_THREAD_MANAGEMENT_H
 
