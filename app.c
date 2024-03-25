@@ -58,6 +58,7 @@ int main() {
 
     dump_arp_table(arp_table);
 
+
     delete_arp_table_entry(arp_table, "10.0.0.100");
 
     printf("\n\n\n");
@@ -68,11 +69,12 @@ int main() {
             .protocol_type = 0x0800,  // Sample protocol type (IPv4)
             .hardware_address_length = 6,  // Assuming MAC addresses are 6 bytes
             .protocol_address_length = 4,  // Assuming IPv4 addresses are 4 bytes
-            .operation_code = 1,  // Sample operation code (request)
+            .operation_code = 2,  // Sample operation code (request)
             .source_mac_address = {{0x00, 0x11, 0x22, 0x33, 0x44, 0x55}},  // Sample source MAC address
             .source_ipv4_address = 0xC0A80101,  // Sample source IPv4 address (192.168.1.1)
             .destination_mac_address = {
-                    {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF}},  // Sample destination MAC address (broadcast)
+                    {(char) 0xFD, (char) 0xCD, (char) 0xFF, (char) 0xFF, (char) 0xFF,
+                     (char) 0xFF}},
             .destination_ipv4_address = 0xC0A80102,  // Sample destination IPv4 address (192.168.1.2)
     };
 
